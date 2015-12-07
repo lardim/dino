@@ -21,12 +21,16 @@ public class animado {
      Graphics g2=null;
       public Thread hilo1=null;
      int ya=0,ya1=0,ya2=0;
-    public int x=0,y=0,posx=0,posy=0,img1=1,puntos=0;
+    public int x=0,y=0,z=0,posx=0,posy=0,img1=1,puntos=0,cac;
     
     
          ImageIcon image =new ImageIcon(new ImageIcon(getClass().getResource("/dino/imagenes/nube.png")).getImage());
          
          ImageIcon imagen =new ImageIcon(new ImageIcon(getClass().getResource("/dino/imagenes/piso.png")).getImage());
+         
+         ImageIcon imagenc =new ImageIcon(new ImageIcon(getClass().getResource("/dino/imagenes/cactus.png")).getImage());
+         
+         ImageIcon imagenc4 =new ImageIcon(new ImageIcon(getClass().getResource("/dino/imagenes/cactus4.png")).getImage());
   private boolean chocapuerta=true;
     
   public animado(JPanel j){
@@ -35,14 +39,19 @@ public class animado {
   y=panel.getHeight()-450;
   posx=x-889;
   posy=y+220;
+  z=x+100;
       System.out.println("tamaño puerta x"+x+"tamaño puerta y ="+y);
   }
     
   public void paint(Graphics g){
      g2=g;
-      
       g.drawImage(image.getImage(), x+100, y,   null);   
-      g.drawImage(imagen.getImage(),posx,posy,null);
+      g.drawImage(imagen.getImage(),posx,posy,null);  
+      if(cac==0)
+        g.drawImage(imagenc.getImage(),z,y+190,null);   
+      else
+        g.drawImage(imagenc4.getImage(),z,y+190,null);             
+      System.out.println(cac+" "+z);
       //System.out.println("tamaño puerta x"+x+"tamaño puerta y ="+y);
   if(chocapuerta){
 //g.setColor(Color.red);   
@@ -67,6 +76,7 @@ public class animado {
    //this.panel.getGraphics().drawLine(30, 30,45, 60);
  if(!hilo2.isAlive()){
             hilo2.start();
+            cact.start();
    }
   else{
  hilo2.resume();
@@ -129,11 +139,11 @@ public class animado {
                panel.repaint();   
                  x-=30;
                  posx-=30;
+                 z-=30;
                  
-                 
-               
-                 hilo2.sleep(100);
-                     puntos++;
+                 if(z<0)
+                     z=890;
+                hilo2.sleep(100);
                  }
                 }
             }catch (java.lang.InterruptedException ie) { System.out.println(ie.getMessage()); }
@@ -172,6 +182,28 @@ public class animado {
                         Logger.getLogger(animado.class.getName()).log(Level.SEVERE, null, ex);
                     }
                }               
+        }
+    };
+     
+     private Thread cact = new Thread()
+    {
+        
+
+        @Override
+        public void run()
+        {
+            
+                
+               while(true){                
+                   try{
+                       System.out.println("holi"+(z>880));
+                       if(z>880)
+                   cac=(int)(Math.random()*2);
+                            salto.sleep(50);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(animado.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+               }    
         }
     };
 
